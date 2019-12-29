@@ -1,2 +1,2 @@
-# lazy-ferry
-Lazy Ferry app helps you catch the next ferry in Amsterdam
+# Lazy Ferry
+Helps you catch the next ferry in Amsterdam.
