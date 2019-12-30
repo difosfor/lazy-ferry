@@ -1,6 +1,7 @@
 # Lazy Ferry
 
 [![Built with open-wc recommendations](https://img.shields.io/badge/built%20with-open--wc-blue.svg)](https://github.com/open-wc)
+[![Netlify Status](https://api.netlify.com/api/v1/badges/9ed4092f-4119-43f0-aa1d-765be5e6c92f/deploy-status)](https://app.netlify.com/sites/lazy-ferry/deploys)
 
 Helps you catch the next ferry in Amsterdam.
 
