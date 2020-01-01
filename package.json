@@ -47,7 +47,7 @@
   "author": "Peter Paul Elfferich",
   "license": "MIT",
   "dependencies": {
-    "lit-html": "^1.0.0",
-    "lit-element": "^2.0.1"
+    "lit-element": "^2.0.1",
+    "lit-html": "^1.0.0"
   }
 }
