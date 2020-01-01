@@ -22,6 +22,10 @@ export class LazyFerry extends LitElement {
         border-bottom: 1px solid #ccc;
       }
 
+      select {
+        font-size: 1em;
+      }
+
       main {
         flex-grow: 1;
       }
@@ -66,7 +70,7 @@ export class LazyFerry extends LitElement {
       <header>
         Lazy Ferry
 
-        <select name="from" autofocus @input="${this.onFromChange}">
+        <select name="from" @input="${this.onFromChange}">
           ${LazyFerry.stops.map(
             stop =>
               html`
