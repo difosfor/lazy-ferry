@@ -1,5 +1,4 @@
-import { LitElement, html, css } from 'lit-element';
-
+import { css, html, LitElement } from 'lit-element';
 import { timetable } from './timetable.js';
 
 export class LazyFerry extends LitElement {
@@ -25,7 +24,6 @@ export class LazyFerry extends LitElement {
 
       main {
         flex-grow: 1;
-        font-size: 0.5em;
       }
 
       .app-footer {
@@ -35,32 +33,84 @@ export class LazyFerry extends LitElement {
     `;
   }
 
+  static get properties() {
+    return {
+      day: { type: String },
+      from: { type: String },
+    };
+  }
+
+  static get stops() {
+    return Object.keys(timetable).sort();
+  }
+
+  constructor() {
+    super();
+
+    this.day = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'][
+      new Date().getDay()
+    ];
+
+    this.from = window.localStorage.getItem('from') || LazyFerry.stops[0];
+  }
+
+  firstUpdated(changedProperties) {
+    super.firstUpdated(changedProperties);
+
+    this.shadowRoot.querySelector('select[name=day]').value = this.day;
+    this.shadowRoot.querySelector('select[name=from]').value = this.from;
+  }
+
   render() {
     return html`
       <header>
-        Lazy Ferry<br />
-        <!-- TODO: replace by select box and current day/time etc. -->
-        From: NDSM<br />
-        On: Monday
+        Lazy Ferry
+
+        <select name="from" autofocus @input="${this.onFromChange}">
+          ${LazyFerry.stops.map(
+            stop =>
+              html`
+                <option>${stop}</option>
+              `,
+          )}
+        </select>
+
+        <select name="day" @input="${this.onDayChange}">
+          <option>monday</option>
+          <option>tuesday</option>
+          <option>wednesday</option>
+          <option>thursday</option>
+          <option>friday</option>
+          <option>saturday</option>
+          <option>sunday</option>
+        </select>
       </header>
 
       <main>
-        <code
-          ><pre>
-          ${JSON.stringify(timetable.NDSM.monday, null, '  ')}
-        </pre
-          ></code
-        >
+        ${timetable[this.from][this.day].map(
+          journey =>
+            html`
+              ${journey.time} => ${journey.to.join(', ')}<br />
+            `,
+        )}
       </main>
 
       <p class="app-footer">
-        ⚓️ Made with love by P.P. Elfferich (<a
-          target="_blank"
-          rel="noopener noreferrer"
-          href="https://github.com/difosfor/lazy-ferry"
-          >source</a
-        >)
+        ⚓️ Made with love by
+        <a target="_blank" href="https://github.com/difosfor">difosfor</a>
+        (<a target="_blank" href="https://github.com/difosfor/lazy-ferry">source</a>)
       </p>
     `;
+  }
+
+  onDayChange(event) {
+    this.day = event.target.value;
+    this.requestUpdate();
+  }
+
+  onFromChange(event) {
+    this.from = event.target.value;
+    this.requestUpdate();
+    window.localStorage.setItem('from', this.from);
   }
 }
