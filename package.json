@@ -7,7 +7,7 @@
     "lint": "npm run lint:eslint && npm run lint:prettier",
     "format": "npm run format:eslint && npm run format:prettier",
     "start:build": "cd dist && es-dev-server --open",
-    "build": "rimraf dist && rollup -c rollup.config.js",
+    "build": "rimraf dist && mkdir dist && cp -r browserconfig.xml site.webmanifest sscaffold.css images dist && rollup -c rollup.config.js",
     "start": "es-dev-server --app-index index.html --node-resolve --open --watch"
   },
   "devDependencies": {
