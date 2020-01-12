@@ -49,7 +49,7 @@ export const lazyFerryStyle = css`
     display: flex;
     justify-content: space-between;
     background-color: var(--primary-dark-color);
-    font-size: 1.2em;
+    font-size: 1.15em;
     line-height: 1.3;
   }
 
