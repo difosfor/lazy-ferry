@@ -14,7 +14,7 @@ const prettierOptions = require('../node_modules/@open-wc/prettier-config/pretti
 const API_KEY = '92e62dcf-42c3-40ba-a8dd-b28aba2888b3';
 
 const CACHE_DIR = 'scrape-cache';
-const JS_FILENAME = 'components/lazy-ferry/src/journeys.js';
+const JS_FILENAME = 'components/lazy-ferry/src/timetable.js';
 
 function writeFile(filePath, text) {
   fs.mkdirSync(path.dirname(filePath), { recursive: true });
@@ -90,10 +90,60 @@ async function getJourneys() {
   return journeys;
 }
 
-async function main() {
+async function getTimetable() {
   const journeys = await getJourneys();
 
-  const js = prettier.format(`export const journeys = ${JSON.stringify(journeys)}`, {
+  const timetable = {};
+
+  for (const journey of journeys) {
+    const { days, stops, trips } = journey;
+
+    let i;
+    // eslint-disable-next-line no-plusplus
+    for (i = 0; i < stops.length - 1; i++) {
+      const from = stops[i];
+
+      if (!timetable[from]) {
+        timetable[from] = {};
+      }
+
+      for (const day of days) {
+        if (!timetable[from][day]) {
+          timetable[from][day] = [];
+        }
+
+        for (const times of trips) {
+          // Filter out duplicates
+          // TODO: Prevent duplicates from ending up here in the first place (find root cause)
+          // TODO: See if we can optimize timetable storage a bit, e.g: make a special case for weekdays
+          const trip = {
+            time: times[i],
+            to: stops.slice(i + 1),
+          };
+          const tripStr = JSON.stringify(trip);
+          const exists = timetable[from][day].some(_trip => JSON.stringify(_trip) === tripStr);
+          if (!exists) {
+            timetable[from][day].push(trip);
+          }
+        }
+      }
+    }
+  }
+
+  for (const stop of Object.keys(timetable)) {
+    for (const day of Object.keys(timetable[stop])) {
+      // eslint-disable-next-line no-nested-ternary
+      timetable[stop][day].sort((a, b) => (a.time < b.time ? -1 : a.time > b.time ? 1 : 0));
+    }
+  }
+
+  return timetable;
+}
+
+async function main() {
+  const timetable = await getTimetable();
+
+  const js = prettier.format(`export const timetable = ${JSON.stringify(timetable)}`, {
     ...prettierOptions,
     parser: 'babel',
   });
