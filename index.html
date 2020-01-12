@@ -1,25 +1,50 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <meta name="Description" content="Helps you catch the next ferry in Amsterdam.">
-  <base href="/">
+  <head>
+    <meta charset="utf-8" />
 
-  <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      font-family: sans-serif;
-      background-color: #ededed;
-    }
-  </style>
-  <title>Lazy Ferry</title>
-</head>
-<body>
-  <lazy-ferry></lazy-ferry>
+    <title>Lazy Ferry</title>
 
-  <script type="module" src="./components/lazy-ferry/lazy-ferry.js"></script>
-</body>
+    <meta name="Description" content="Helps you catch the next ferry in Amsterdam." />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <base href="/" />
 
+    <!-- Based on: https://realfavicongenerator.net and /images/src/icon.png -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/icons/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/icons/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/icons/favicon-16x16.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="mask-icon" href="/images/icons/safari-pinned-tab.svg" color="#0277bd" />
+    <link rel="shortcut icon" href="/images/icons/favicon.ico" />
+    <meta name="apple-mobile-web-app-title" content="Lazy Ferry" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="application-name" content="Lazy Ferry" />
+    <meta name="msapplication-TileColor" content="#0277bd" />
+    <meta name="msapplication-config" content="/browserconfig.xml" />
+    <meta name="theme-color" content="#004c8c" />
+
+    <style>
+      :root {
+        /* Based on: https://material.io/resources/color/#!/?view.left=0&view.right=0&primary.color=0277BD&secondary.color=ffc400 */
+        --primary-text-color: #fff;
+        --primary-color: #0277bd;
+        --primary-light-color: #58a5f0;
+        --primary-dark-color: #004c8c;
+
+        --secondary-text-color: #000;
+        --secondary-color: #ffc400;
+        --secondary-light-color: #fff64f;
+        --secondary-dark-color: #c79400;
+      }
+    </style>
+
+    <!-- From: https://github.com/robsheldon/sscaffold-css -->
+    <link rel="stylesheet" href="sscaffold.css" />
+  </head>
+  <body>
+    <lazy-ferry></lazy-ferry>
+
+    <script type="module" src="./components/lazy-ferry/lazy-ferry.js"></script>
+  </body>
 </html>

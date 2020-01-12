@@ -1,45 +1,19 @@
-import { css, html, LitElement } from 'lit-element';
+import { html, LitElement } from 'lit-element';
+import { boatIcon } from './icons/boat-icon.js';
+import { githubIcon } from './icons/github-icon.js';
+import { refreshIcon } from './icons/refresh-icon.js';
+import { lazyFerryStyle } from './lazyFerryStyle.js';
 import { timetable } from './timetable.js';
 
 export class LazyFerry extends LitElement {
   static get styles() {
-    return css`
-      :host {
-        min-height: 100vh;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: flex-start;
-        font-size: calc(10px + 2vmin);
-        color: #1a2b42;
-        max-width: 960px;
-        margin: 0 auto;
-      }
-
-      header {
-        width: 100%;
-        background: #fff;
-        border-bottom: 1px solid #ccc;
-      }
-
-      select {
-        font-size: 1em;
-      }
-
-      main {
-        flex-grow: 1;
-      }
-
-      .app-footer {
-        font-size: calc(12px + 0.5vmin);
-        align-items: center;
-      }
-    `;
+    return lazyFerryStyle;
   }
 
   static get properties() {
     return {
-      day: { type: String },
+      today: { type: String },
+      tomorrow: { type: String },
       from: { type: String },
     };
   }
@@ -51,65 +25,120 @@ export class LazyFerry extends LitElement {
   constructor() {
     super();
 
-    this.day = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'][
-      new Date().getDay()
-    ];
-
+    // Instead of persisting choice in local storage look for most nearby stop by geo location from refresh()
     this.from = window.localStorage.getItem('from') || LazyFerry.stops[0];
+
+    this.refresh();
+  }
+
+  $(selector) {
+    return this.shadowRoot ? this.shadowRoot.querySelector(selector) : null;
+  }
+
+  $$(selector) {
+    return this.shadowRoot ? this.shadowRoot.querySelectorAll(selector) : null;
   }
 
   firstUpdated(changedProperties) {
     super.firstUpdated(changedProperties);
 
-    this.shadowRoot.querySelector('select[name=day]').value = this.day;
-    this.shadowRoot.querySelector('select[name=from]').value = this.from;
+    this.$('select[name=from]').value = this.from;
+  }
+
+  updated(changedProperties) {
+    super.updated(changedProperties);
+
+    const trips = this.$$('.main-trip');
+    if (!trips) {
+      return;
+    }
+
+    const now = new Date().toTimeString().slice(0, 8);
+
+    const next = Array.from(trips).find(trip => trip.dataset.time > now);
+
+    next.scrollIntoView(true);
+    next.focus();
+  }
+
+  refresh() {
+    const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+    this.today = days[new Date().getDay()];
+    this.tomorrow = days[(new Date().getDay() + 1) % 7];
+
+    this.requestUpdate();
   }
 
   render() {
     return html`
+      <link rel="stylesheet" href="sscaffold.css" />
+
       <header>
-        Lazy Ferry
+        <span>
+          <a
+            href="#"
+            @click="${event => {
+              event.preventDefault();
+              this.refresh();
+            }}"
+          >
+            ${boatIcon} Lazy Ferry ${refreshIcon}
+          </a>
+        </span>
 
-        <select name="from" @input="${this.onFromChange}">
-          ${LazyFerry.stops.map(
-            stop =>
-              html`
-                <option>${stop}</option>
-              `,
-          )}
-        </select>
-
-        <select name="day" @input="${this.onDayChange}">
-          <option>monday</option>
-          <option>tuesday</option>
-          <option>wednesday</option>
-          <option>thursday</option>
-          <option>friday</option>
-          <option>saturday</option>
-          <option>sunday</option>
-        </select>
+        <span>
+          <select name="from" @input="${this.onFromChange}">
+            ${LazyFerry.stops.map(
+              stop =>
+                html`
+                  <option>${stop}</option>
+                `,
+            )}
+          </select>
+        </span>
       </header>
 
       <main>
-        ${timetable[this.from][this.day].map(
-          journey =>
-            html`
-              ${journey.time} => ${journey.to.join(', ')}<br />
-            `,
-        )}
+        <div class="main-trips">
+          <!-- TODO: Replace by infinite scrolling -->
+          ${this.renderDay(this.today)} ${this.renderDay(this.tomorrow)}
+        </div>
       </main>
 
-      <p class="app-footer">
-        ⚓️ Made with love by
-        <a target="_blank" href="https://github.com/difosfor">difosfor</a>
-        (<a target="_blank" href="https://github.com/difosfor/lazy-ferry">source</a>)
-      </p>
+      <footer>
+        Made with ♥ by
+        <a
+          target="_blank"
+          rel="noopener"
+          title="difosfor on GitHub"
+          href="https://github.com/difosfor"
+          >difosfor</a
+        >
+        <a
+          target="_blank"
+          rel="noopener"
+          title="Lazy Ferry on GitHub"
+          href="https://github.com/difosfor/lazy-ferry"
+        >
+          ${githubIcon}
+        </a>
+      </footer>
     `;
   }
 
-  onDayChange(event) {
-    this.day = event.target.value;
-    this.requestUpdate();
+  renderDay(day) {
+    return html`
+      <div class="main-day">${day}</div>
+      <!-- TODO: Create lazy-trip element and use that here to add countdown support etc. -->
+      ${timetable[this.from][day].map(
+        journey =>
+          html`
+            <div class="main-trip" tabindex="0" data-time="${journey.time}">
+              ${journey.time} to ${journey.to.join(', ')}<br />
+            </div>
+          `,
+      )}
+    `;
   }
 
   onFromChange(event) {
