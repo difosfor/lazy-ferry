@@ -39,14 +39,14 @@ export const lazyFerryStyle = css`
   header,
   main,
   footer {
-    padding: 0.3em;
+    padding: var(--padding);
   }
 
   /* header */
 
   header {
     width: 100%;
-    padding-top: env(safe-area-inset-top);
+    padding-top: calc(var(--safe-area-inset-top) + var(--padding));
     display: flex;
     justify-content: space-between;
     background-color: var(--primary-dark-color);
@@ -57,7 +57,7 @@ export const lazyFerryStyle = css`
   header select {
     height: 1.9em;
     width: initial;
-    padding: 0.3em 1.4em 0.3em 0.5em;
+    padding: var(--padding) calc(var(--padding) + 1.1em) var(--padding) calc(var(--padding) + 0.2em);
     margin-bottom: 0;
     color: var(--primary-text-color);
     font-size: 0.8em;
@@ -87,11 +87,11 @@ export const lazyFerryStyle = css`
   }
 
   .main-trip {
-    margin: 0.3em;
-    padding: 0.3em;
+    margin: var(--padding);
+    padding: var(--padding);
     background-color: var(--primary-light-color);
     border: 1px solid var(--primary-light-color);
-    border-radius: 0.3em;
+    border-radius: var(--padding);
   }
 
   .main-trip:focus {
@@ -103,7 +103,7 @@ export const lazyFerryStyle = css`
 
   footer {
     width: 100%;
-    padding-bottom: env(safe-area-inset-bottom);
+    padding-bottom: calc(var(--safe-area-inset-bottom) + var(--padding));
     background-color: var(--primary-dark-color);
     font-size: 0.8em;
     line-height: 1.3;
