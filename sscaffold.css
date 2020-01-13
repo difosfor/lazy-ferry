@@ -30,6 +30,12 @@ body {
 	   this is still current. Probably safe to assume that an appropriately legible
 	   font will be used anyway. [4] */
   text-rendering: optimizeSpeed;
+  /* Disable iOS text selection */
+  -webkit-user-select: none;
+  /* Disable iOS link tap highlighting */
+  -webkit-tap-highlight-color: transparent;
+  /* Disable iOS callouts */
+  -webkit-touch-callout: none;
 }
 
 body,

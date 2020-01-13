@@ -8,7 +8,7 @@
     <meta name="Description" content="Helps you catch the next ferry in Amsterdam." />
     <meta
       name="viewport"
-      content="viewport-fit=cover, user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1"
+      content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1, viewport-fit=cover"
     />
     <base href="/" />
 
@@ -21,7 +21,7 @@
     <link rel="shortcut icon" href="/images/icons/favicon.ico" />
     <meta name="apple-mobile-web-app-title" content="Lazy Ferry" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="application-name" content="Lazy Ferry" />
     <meta name="msapplication-TileColor" content="#0277bd" />
     <meta name="msapplication-config" content="/browserconfig.xml" />
@@ -91,13 +91,22 @@
         --secondary-color: #ffc400;
         --secondary-light-color: #fff64f;
         --secondary-dark-color: #c79400;
+
+        /* To enable use of these values within calc() */
+        --safe-area-inset-top: env(safe-area-inset-top);
+        --safe-area-inset-right: env(safe-area-inset-right);
+        --safe-area-inset-bottom: env(safe-area-inset-bottom);
+        --safe-area-inset-left: env(safe-area-inset-left);
       }
     </style>
 
-    <!-- From: https://github.com/robsheldon/sscaffold-css -->
+    <!-- Based on: https://github.com/robsheldon/sscaffold-css -->
     <link rel="stylesheet" href="sscaffold.css" />
   </head>
-  <body>
+
+  <!-- Empty ontouchstart makes iOS trigger :hover and :active styles of elements -->
+  <!-- Source: https://medium.com/appscope/designing-native-like-progressive-web-apps-for-ios-1b3cdda1d0e8 -->
+  <body ontouchstart="">
     <lazy-ferry></lazy-ferry>
 
     <script type="module" src="./components/lazy-ferry/lazy-ferry.js"></script>
