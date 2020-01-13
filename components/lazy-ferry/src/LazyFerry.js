@@ -56,6 +56,9 @@ export class LazyFerry extends LitElement {
     const now = new Date().toTimeString().slice(0, 8);
 
     const next = Array.from(trips).find(trip => trip.dataset.time > now);
+    if (!next) {
+      return;
+    }
 
     next.scrollIntoView(true);
     next.focus();
