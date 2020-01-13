@@ -4,8 +4,6 @@ export const lazyFerryStyle = css`
   :host {
     height: 100vh;
     width: 100%;
-    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom)
-      env(safe-area-inset-left);
     display: flex;
     flex-direction: column;
     background-color: var(--primary-color);
@@ -48,6 +46,7 @@ export const lazyFerryStyle = css`
 
   header {
     width: 100%;
+    padding-top: env(safe-area-inset-top);
     display: flex;
     justify-content: space-between;
     background-color: var(--primary-dark-color);
@@ -104,6 +103,7 @@ export const lazyFerryStyle = css`
 
   footer {
     width: 100%;
+    padding-bottom: env(safe-area-inset-bottom);
     background-color: var(--primary-dark-color);
     font-size: 0.8em;
     line-height: 1.3;
