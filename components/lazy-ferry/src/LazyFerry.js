@@ -1,15 +1,13 @@
 import { html, LitElement } from 'lit-element';
+import { getDistance } from './getDistance.js';
 import { boatIcon } from './icons/boat-icon.js';
 import { githubIcon } from './icons/github-icon.js';
-import { refreshIcon } from './icons/refresh-icon.js';
+import { locationIcon } from './icons/location-icon.js';
 import { lazyFerryStyle } from './lazyFerryStyle.js';
+import { stops } from './stops.js';
 import { timetable } from './timetable.js';
 
 export class LazyFerry extends LitElement {
-  static get styles() {
-    return lazyFerryStyle;
-  }
-
   static get properties() {
     return {
       today: { type: String },
@@ -18,14 +16,13 @@ export class LazyFerry extends LitElement {
     };
   }
 
-  static get stops() {
-    return Object.keys(timetable).sort();
+  static get styles() {
+    return lazyFerryStyle;
   }
 
   constructor() {
     super();
 
-    // Instead of persisting choice in local storage look for most nearby stop by geo location from refresh()
     this.from = window.localStorage.getItem('from') || LazyFerry.stops[0];
 
     this.refresh();
@@ -45,30 +42,12 @@ export class LazyFerry extends LitElement {
     this.$('select[name=from]').value = this.from;
   }
 
-  updated(changedProperties) {
-    super.updated(changedProperties);
-
-    const trips = this.$$('.main-trip');
-    if (!trips) {
-      return;
-    }
-
-    const now = new Date().toTimeString().slice(0, 8);
-
-    const next = Array.from(trips).find(trip => trip.dataset.time > now);
-    if (!next) {
-      return;
-    }
-
-    next.scrollIntoView(true);
-    next.focus();
-  }
-
   refresh() {
     const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
     this.today = days[new Date().getDay()];
     this.tomorrow = days[(new Date().getDay() + 1) % 7];
 
+    // Re-render trips and then re-focus next trip
     this.requestUpdate();
   }
 
@@ -85,16 +64,30 @@ export class LazyFerry extends LitElement {
               this.refresh();
             }}"
           >
-            ${boatIcon} Lazy Ferry ${refreshIcon}
+            ${boatIcon} Lazy Ferry
           </a>
         </span>
 
         <span>
-          <select name="from" @input="${this.onFromChange}">
-            ${LazyFerry.stops.map(
+          <a
+            href="#"
+            @click="${event => {
+              event.preventDefault();
+              this.setFromClosest();
+            }}"
+          >
+            ${locationIcon}
+          </a>
+          <select
+            name="from"
+            @input="${event => {
+              this.setFrom(event.target.value);
+            }}"
+          >
+            ${stops.map(
               stop =>
                 html`
-                  <option>${stop}</option>
+                  <option>${stop.name}</option>
                 `,
             )}
           </select>
@@ -137,16 +130,63 @@ export class LazyFerry extends LitElement {
         journey =>
           html`
             <div class="main-trip" tabindex="0" data-time="${journey.time}">
-              ${journey.time} to ${journey.to.join(', ')}<br />
+              ${journey.time} to ${journey.to.join(', ')} <sup>[${journey.line}]</sup>
             </div>
           `,
       )}
     `;
   }
 
-  onFromChange(event) {
-    this.from = event.target.value;
+  setFrom(value) {
+    this.from = value;
+
+    for (const option of this.$$('select[name=from] option')) {
+      option.selected = option.value === this.from;
+    }
+
+    // Re-render trips and then re-focus next trip
     this.requestUpdate();
+
     window.localStorage.setItem('from', this.from);
+  }
+
+  setFromClosest() {
+    navigator.geolocation.getCurrentPosition(pos => {
+      const {
+        coords: { latitude: lat, longitude: lon },
+      } = pos;
+
+      let closestStop = stops.find(stop => stop.name === this.from);
+      let closestDist = getDistance(lat, lon, closestStop.lat, closestStop.lon);
+
+      for (const stop of stops) {
+        const dist = getDistance(lat, lon, stop.lat, stop.lon);
+        if (dist < closestDist) {
+          closestStop = stop;
+          closestDist = dist;
+        }
+      }
+
+      this.setFrom(closestStop.name);
+    });
+  }
+
+  updated(changedProperties) {
+    super.updated(changedProperties);
+
+    const trips = this.$$('.main-trip');
+    if (!trips) {
+      return;
+    }
+
+    const now = new Date().toTimeString().slice(0, 8);
+
+    const next = Array.from(trips).find(trip => trip.dataset.time > now);
+    if (!next) {
+      return;
+    }
+
+    next.scrollIntoView(true);
+    next.focus();
   }
 }

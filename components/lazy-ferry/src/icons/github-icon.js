@@ -1,6 +1,6 @@
-import { html } from 'lit-element';
+import { svg } from 'lit-element';
 
-export const githubIcon = html`
+export const githubIcon = svg`
   <svg class="icon" viewBox="0 40 512 512">
     <g>
       <path

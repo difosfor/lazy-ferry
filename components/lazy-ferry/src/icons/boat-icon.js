@@ -1,6 +1,6 @@
-import { html } from 'lit-element';
+import { svg } from 'lit-element';
 
-export const boatIcon = html`
+export const boatIcon = svg`
   <svg class="icon" viewBox="0 0 24 24">
     <g>
       <path

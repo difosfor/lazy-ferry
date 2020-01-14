@@ -53,6 +53,7 @@ async function getUrls(line) {
 
 async function getJourney(url) {
   const {
+    line,
     validFor,
     journey: { stops },
     trips,
@@ -70,6 +71,7 @@ async function getJourney(url) {
   const stopNames = stops.map(stop => stop.name);
   const tripTimes = trips.map(trip => trip.times);
   return {
+    line: line.number,
     days,
     stops: stopNames,
     trips: tripTimes,
@@ -118,6 +120,7 @@ async function getTimetable() {
           // TODO: See if we can optimize timetable storage a bit, e.g: make a special case for weekdays
           const trip = {
             time: times[i],
+            line: journey.line,
             to: stops.slice(i + 1),
           };
           const tripStr = JSON.stringify(trip);

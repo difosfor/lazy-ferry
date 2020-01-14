@@ -1,6 +1,6 @@
-import { html } from 'lit-element';
+import { svg } from 'lit-element';
 
-export const refreshIcon = html`
+export const refreshIcon = svg`
   <svg class="icon" viewBox="0 0 24 24">
     <g>
       <path
