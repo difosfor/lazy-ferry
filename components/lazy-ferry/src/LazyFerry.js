@@ -6,6 +6,7 @@ import { locationIcon } from './icons/location-icon.js';
 import { lazyFerryStyle } from './lazyFerryStyle.js';
 import { stops } from './stops.js';
 import { timetable } from './timetable.js';
+import '../../lazy-trip/lazy-trip.js';
 
 export class LazyFerry extends LitElement {
   static get properties() {
@@ -125,13 +126,10 @@ export class LazyFerry extends LitElement {
   renderDay(day) {
     return html`
       <div class="main-day">${day}</div>
-      <!-- TODO: Create lazy-trip element and use that here to add countdown support etc. -->
       ${timetable[this.from][day].map(
-        journey =>
+        trip =>
           html`
-            <div class="main-trip" tabindex="0" data-time="${journey.time}">
-              ${journey.time} to ${journey.to.join(', ')} <sup>[${journey.line}]</sup>
-            </div>
+            <lazy-trip .trip="${trip}"></lazy-trip>
           `,
       )}
     `;
@@ -174,19 +172,21 @@ export class LazyFerry extends LitElement {
   updated(changedProperties) {
     super.updated(changedProperties);
 
-    const trips = this.$$('.main-trip');
-    if (!trips) {
+    const lazyTrips = this.$$('lazy-trip');
+    if (!lazyTrips) {
       return;
     }
 
     const now = new Date().toTimeString().slice(0, 8);
 
-    const next = Array.from(trips).find(trip => trip.dataset.time > now);
-    if (!next) {
-      return;
+    let foundNext = false;
+    for (const lazyTrip of lazyTrips) {
+      if (!foundNext && lazyTrip.trip.time > now) {
+        foundNext = true;
+        lazyTrip.setIsNext(true);
+      } else {
+        lazyTrip.setIsNext(false);
+      }
     }
-
-    next.scrollIntoView(true);
-    next.focus();
   }
 }

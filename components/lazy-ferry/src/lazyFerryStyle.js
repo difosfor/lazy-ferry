@@ -86,17 +86,8 @@ export const lazyFerryStyle = css`
     max-width: 100%;
   }
 
-  .main-trip {
-    margin: var(--padding);
-    padding: var(--padding);
-    background-color: var(--primary-light-color);
-    border: 1px solid var(--primary-light-color);
-    border-radius: var(--padding);
-  }
-
-  .main-trip:focus {
-    outline: 0;
-    border: 1px solid var(--secondary-color);
+  lazy-trip {
+    margin: calc(2 * var(--padding));
   }
 
   /* footer */
