@@ -23,7 +23,7 @@ export class LazyFerry extends LitElement {
   constructor() {
     super();
 
-    this.from = window.localStorage.getItem('from') || LazyFerry.stops[0];
+    this.from = window.localStorage.getItem('from') || stops[0];
 
     this.refresh();
   }
