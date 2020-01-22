@@ -21,32 +21,6 @@ export const sscaffoldStyle = css`
     box-sizing: inherit;
   }
 
-  html {
-    /* Fix the line height in all browsers. [1] */
-    line-height: 1.15;
-    /* Set universal box sizing with inheritance. [3] */
-    box-sizing: border-box;
-  }
-
-  body {
-    /* Smoothly scroll between anchors. [4] */
-    scroll-behavior: smooth;
-    /* Prevent adjustments of font size after orientation changes in iOS. [1] */
-    -webkit-text-size-adjust: 100%;
-    /* optimizeLegibility may cause some performance issues in some browsers
-      (https://marco.org/2012/11/15/text-rendering-optimize-legibility) -- not sure if
-      this is still current. Probably safe to assume that an appropriately legible
-      font will be used anyway. [4] */
-    text-rendering: optimizeSpeed;
-    /* Disable iOS text selection */
-    -webkit-user-select: none;
-    /* Disable iOS link tap highlighting */
-    -webkit-tap-highlight-color: transparent;
-    /* Disable iOS callouts */
-    -webkit-touch-callout: none;
-  }
-
-  body,
   h1,
   h2,
   h3,
@@ -708,35 +682,6 @@ export const sscaffoldStyle = css`
 
   /******************************************************************************
    *
-   *   LAYOUT
-   *
-   *   Rules that impact the positioning of major layout elements.
-   * 
-   ******************************************************************************/
-
-  body {
-    /* Ensure that the page body fills the display even if the content does not. [4] */
-    min-height: 100vh;
-    /* The following two rules allow the header and footer elements to be positioned
-      correctly assuming they're all direct descendants of the <body> element. */
-    display: flex;
-    flex-direction: column;
-  }
-
-  header,
-  footer {
-    /* Prevent these two eleemnts from shrinking when content is added to the <body>
-      element. */
-    flex-shrink: 0;
-  }
-
-  main {
-    /* Allow the <main> element to grow as necessary. */
-    flex-grow: 1;
-  }
-
-  /******************************************************************************
-   *
    *   UTILITY CLASSES
    *
    *   Some helpful utility classes.
@@ -776,20 +721,6 @@ export const sscaffoldStyle = css`
   /**
    * Typography: font, letter-spacing, line-height, text-*, list-style-type.
    */
-
-  html {
-    /* Font size is set to 62.5% so that all future rem sizes are based on a 10px font. [6] */
-    font-size: 62.5%;
-  }
-
-  body {
-    font-family: 'Open Sans', Corbel, 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans',
-      'DejaVu Sans', 'Bitstream Vera Sans', 'Liberation Sans', Verdana, 'Verdana Ref', sans-serif;
-    /* font-size: 1.8em; */
-    font-size: calc(10px + 2vmin);
-    font-weight: 300;
-    line-height: 1.6;
-  }
 
   main article,
   main section {
@@ -1066,18 +997,33 @@ export const sscaffoldStyle = css`
    * Colors, borders, outline, box-shadow, appearance, and opacity.
    */
 
-  body {
-    color: #595959;
+  :host {
+    color: var(--primary-text-color);
   }
 
   a {
-    color: #5680cc;
+    color: var(--primary-text-color);
     text-decoration: none;
   }
 
   a:focus,
   a:hover {
-    color: #595959;
+    color: var(--secondary-color);
+  }
+
+  a:focus {
+    outline: 0;
+  }
+
+  .icon {
+    height: 1em;
+    fill: var(--primary-text-color);
+    vertical-align: middle;
+  }
+
+  a:hover .icon,
+  a:focus .icon {
+    fill: var(--secondary-color);
   }
 
   blockquote {

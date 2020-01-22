@@ -7,34 +7,9 @@ export const lazyFerryStyle = css`
     display: flex;
     flex-direction: column;
     background-color: var(--primary-color);
-    color: var(--primary-text-color);
   }
 
   /* General CSS */
-
-  a {
-    color: var(--primary-text-color);
-  }
-
-  a:hover,
-  a:focus {
-    color: var(--secondary-color);
-  }
-
-  a:focus {
-    outline: 0;
-  }
-
-  .icon {
-    height: 1em;
-    fill: var(--primary-text-color);
-    vertical-align: middle;
-  }
-
-  a:hover .icon,
-  a:focus .icon {
-    fill: var(--secondary-color);
-  }
 
   header,
   main,

@@ -6,7 +6,6 @@ export const lazyTripStyle = css`
     display: block;
     padding: var(--padding);
     background-color: var(--primary-light-color);
-    color: var(--primary-text-color);
     border-radius: var(--padding);
     text-align: center;
   }
