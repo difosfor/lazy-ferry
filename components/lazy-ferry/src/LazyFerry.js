@@ -1,4 +1,6 @@
 import { html, LitElement } from 'lit-element';
+import { sscaffoldStyle } from '../../../sscaffoldStyle.js';
+import '../../lazy-trip/lazy-trip.js';
 import { getDistance } from './getDistance.js';
 import { boatIcon } from './icons/boat-icon.js';
 import { githubIcon } from './icons/github-icon.js';
@@ -6,7 +8,6 @@ import { locationIcon } from './icons/location-icon.js';
 import { lazyFerryStyle } from './lazyFerryStyle.js';
 import { stops } from './stops.js';
 import { timetable } from './timetable.js';
-import '../../lazy-trip/lazy-trip.js';
 
 export class LazyFerry extends LitElement {
   static get properties() {
@@ -18,7 +19,7 @@ export class LazyFerry extends LitElement {
   }
 
   static get styles() {
-    return lazyFerryStyle;
+    return [sscaffoldStyle, lazyFerryStyle];
   }
 
   constructor() {
@@ -54,8 +55,6 @@ export class LazyFerry extends LitElement {
 
   render() {
     return html`
-      <link rel="stylesheet" href="sscaffold.css" />
-
       <header>
         <span>
           <a
