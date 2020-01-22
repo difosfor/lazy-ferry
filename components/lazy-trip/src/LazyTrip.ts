@@ -1,13 +1,18 @@
-import { html, LitElement } from 'lit-element';
-import { mainStyle } from '../../../mainStyle.js';
-import { lazyTripStyle } from './lazyTripStyle.js';
+import { html, LitElement, property } from 'lit-element';
+import { mainStyle } from '../../../mainStyle';
+import { Trip } from '../../lazy-ferry/src/timetable';
+import { lazyTripStyle } from './lazyTripStyle';
 
-function timeToSeconds(time) {
-  const [, hh, mm, ss] = time.match(/^(\d\d):(\d\d):(\d\d)$/);
+function timeToSeconds(time: string) {
+  const matches = /^(\d\d):(\d\d):(\d\d)$/.exec(time);
+  if (!matches) {
+    throw new Error(`Invalid time string: ${time}`);
+  }
+  const [, hh, mm, ss] = matches;
   return parseFloat(ss) + 60 * (parseFloat(mm) + 60 * parseFloat(hh));
 }
 
-function secondsToTime(seconds) {
+function secondsToTime(seconds: number) {
   const hh = `${Math.floor(seconds / 3600)}`.padStart(2, '0');
   const mm = `${Math.floor((seconds % 3600) / 60)}`.padStart(2, '0');
   const ss = `${Math.round(seconds % 60)}`.padStart(2, '0');
@@ -15,25 +20,18 @@ function secondsToTime(seconds) {
 }
 
 export class LazyTrip extends LitElement {
-  static get properties() {
-    return {
-      isNext: { type: Boolean },
-      timeToGo: { type: String },
-      trip: { type: Object },
-    };
-  }
+  static styles = [mainStyle, lazyTripStyle];
 
-  static get styles() {
-    return [mainStyle, lazyTripStyle];
-  }
+  @property({ type: Boolean })
+  isNext = false;
 
-  constructor() {
-    super();
+  tickId = -1;
 
-    this.isNext = false;
-    this.timeToGo = '';
-    this.trip = null;
-  }
+  @property({ type: String })
+  timeToGo = '';
+
+  @property({ type: Object })
+  trip: Trip = { time: '00:00:00', line: '0', to: [] };
 
   render() {
     return html`
@@ -60,7 +58,7 @@ export class LazyTrip extends LitElement {
     `;
   }
 
-  setIsNext(isNext) {
+  setIsNext(isNext: boolean) {
     // Also scroll into view when this.isNext was already true
     if (isNext) {
       this.scrollIntoView(true);

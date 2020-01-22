@@ -750,9 +750,10 @@ export const mainStyle = css`
   h4,
   h5,
   h6 {
-    font-family: 'Montserrat', Frutiger, 'Frutiger Linotype', Univers, Calibri, 'Gill Sans',
-      'Gill Sans MT', 'Myriad Pro', Myriad, 'DejaVu Sans Condensed', 'Liberation Sans',
-      'Nimbus Sans L', Tahoma, Geneva, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-family: 'Montserrat', Frutiger, 'Frutiger Linotype', Univers, Calibri,
+      'Gill Sans', 'Gill Sans MT', 'Myriad Pro', Myriad, 'DejaVu Sans Condensed',
+      'Liberation Sans', 'Nimbus Sans L', Tahoma, Geneva, 'Helvetica Neue',
+      Helvetica, Arial, sans-serif;
     font-weight: 500;
   }
 

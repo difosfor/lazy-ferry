@@ -5,7 +5,7 @@ const fetch = require('node-fetch');
 const fs = require('fs');
 const path = require('path');
 const prettier = require('prettier');
-const prettierOptions = require('../node_modules/@open-wc/prettier-config/prettier.config.js');
+const prettierOptions = require('../prettier.config.js');
 
 // Note: I got this API key by opening: https://reisinfo.gvb.nl/nl/lijnen/905
 // and then clicking "Bekijk dienstregeling"
@@ -14,7 +14,7 @@ const prettierOptions = require('../node_modules/@open-wc/prettier-config/pretti
 const API_KEY = '92e62dcf-42c3-40ba-a8dd-b28aba2888b3';
 
 const CACHE_DIR = 'scrape-cache';
-const JS_FILENAME = 'components/lazy-ferry/src/timetable.js';
+const JS_FILENAME = 'components/lazy-ferry/src/timetable.ts';
 
 function writeFile(filePath, text) {
   fs.mkdirSync(path.dirname(filePath), { recursive: true });
@@ -106,14 +106,18 @@ async function getTimetable() {
       const from = stops[i];
 
       if (!timetable[from]) {
-        timetable[from] = {};
+        timetable[from] = {
+          monday: [],
+          tuesday: [],
+          wednesday: [],
+          thursday: [],
+          friday: [],
+          saturday: [],
+          sunday: [],
+        };
       }
 
       for (const day of days) {
-        if (!timetable[from][day]) {
-          timetable[from][day] = [];
-        }
-
         for (const times of trips) {
           // Filter out duplicates
           // TODO: Prevent duplicates from ending up here in the first place (find root cause)
@@ -124,7 +128,9 @@ async function getTimetable() {
             to: stops.slice(i + 1),
           };
           const tripStr = JSON.stringify(trip);
-          const exists = timetable[from][day].some(_trip => JSON.stringify(_trip) === tripStr);
+          const exists = timetable[from][day].some(
+            _trip => JSON.stringify(_trip) === tripStr,
+          );
           if (!exists) {
             timetable[from][day].push(trip);
           }
@@ -135,8 +141,10 @@ async function getTimetable() {
 
   for (const stop of Object.keys(timetable)) {
     for (const day of Object.keys(timetable[stop])) {
-      // eslint-disable-next-line no-nested-ternary
-      timetable[stop][day].sort((a, b) => (a.time < b.time ? -1 : a.time > b.time ? 1 : 0));
+      timetable[stop][day].sort((a, b) =>
+        // eslint-disable-next-line no-nested-ternary
+        a.time < b.time ? -1 : a.time > b.time ? 1 : 0,
+      );
     }
   }
 
@@ -146,10 +154,29 @@ async function getTimetable() {
 async function main() {
   const timetable = await getTimetable();
 
-  const js = prettier.format(`export const timetable = ${JSON.stringify(timetable)}`, {
-    ...prettierOptions,
-    parser: 'babel',
-  });
+  const js = prettier.format(
+    `import { StopName } from './stops';
+import { Weekday } from './weekdays';
+
+interface Trip {
+  time: string;
+  line: string;
+  to: StopName[];
+}
+
+type Timetable = {
+  [key in StopName]: {
+    [key in Weekday]: Trip[];
+  };
+};
+
+export const timetable: Timetable = ${JSON.stringify(timetable)};
+`,
+    {
+      ...prettierOptions,
+      parser: 'typescript',
+    },
+  );
 
   writeFile(JS_FILENAME, js);
 }

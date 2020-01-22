@@ -1,19 +1,36 @@
 {
+  "name": "lazy-ferry",
+  "version": "0.0.0",
+  "description": "Helps you catch the next ferry in Amsterdam.",
+  "author": "Peter Paul Elfferich",
+  "license": "MIT",
+  "repository": "github:exmg/lazy-ferry",
   "scripts": {
-    "lint:eslint": "eslint --ext .js,.html . --ignore-path .gitignore",
-    "format:eslint": "eslint --ext .js,.html . --fix --ignore-path .gitignore",
-    "lint:prettier": "prettier \"**/*.js\" --check --ignore-path .gitignore",
-    "format:prettier": "prettier \"**/*.js\" --write --ignore-path .gitignore",
-    "lint": "npm run lint:eslint && npm run lint:prettier",
+    "build:copy": "mkdir dist && cp -r browserconfig.xml site.webmanifest main.css images dist",
+    "build": "npm run clean && npm run build:copy && tsc && rollup -c rollup.config.js",
+    "clean": "rimraf build dist",
+    "format:eslint": "eslint --ext .ts,.js,.html . --fix",
+    "format:prettier": "prettier \"**/*.{ts,js,json,html}\" --write",
     "format": "npm run format:eslint && npm run format:prettier",
+    "lint:eslint": "eslint --ext .ts,.js,.html .",
+    "lint:prettier": "prettier \"**/*.{ts,js,json,html}\" --check",
+    "lint": "npm run lint:eslint && npm run lint:prettier",
     "start:build": "cd dist && es-dev-server --open",
-    "build": "rimraf dist && mkdir dist && cp -r browserconfig.xml site.webmanifest main.css images dist && rollup -c rollup.config.js",
-    "start": "es-dev-server --app-index index.html --node-resolve --open --watch"
+    "start": "es-dev-server --app-index index.html --node-resolve --open --watch",
+    "watch": "tsc -w"
+  },
+  "dependencies": {
+    "@typescript-eslint/eslint-plugin": "^2.17.0",
+    "@typescript-eslint/parser": "^2.17.0",
+    "eslint-config-prettier": "^6.9.0",
+    "lit-element": "^2.0.1",
+    "lit-html": "^1.0.0",
+    "prettier": "^1.19.1",
+    "typescript": "^3.7.5"
   },
   "devDependencies": {
     "@open-wc/building-rollup": "^0.17.1",
     "@open-wc/eslint-config": "^2.0.0",
-    "@open-wc/prettier-config": "^0.1.10",
     "es-dev-server": "^1.5.0",
     "eslint": "^6.1.0",
     "husky": "^1.0.0",
@@ -22,13 +39,6 @@
     "rimraf": "^2.6.3",
     "rollup": "^1.15.4"
   },
-  "eslintConfig": {
-    "extends": [
-      "@open-wc/eslint-config",
-      "eslint-config-prettier"
-    ]
-  },
-  "prettier": "@open-wc/prettier-config",
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged"
@@ -40,14 +50,5 @@
       "prettier --write",
       "git add"
     ]
-  },
-  "name": "lazy-ferry",
-  "version": "0.0.0",
-  "description": "Helps you catch the next ferry in Amsterdam.",
-  "author": "Peter Paul Elfferich",
-  "license": "MIT",
-  "dependencies": {
-    "lit-element": "^2.0.1",
-    "lit-html": "^1.0.0"
   }
 }

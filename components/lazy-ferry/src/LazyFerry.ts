@@ -1,53 +1,50 @@
-import { html, LitElement } from 'lit-element';
-import { mainStyle } from '../../../mainStyle.js';
-import '../../lazy-trip/lazy-trip.js';
-import { getDistance } from './getDistance.js';
-import { boatIcon } from './icons/boat-icon.js';
-import { githubIcon } from './icons/github-icon.js';
-import { locationIcon } from './icons/location-icon.js';
-import { lazyFerryStyle } from './lazyFerryStyle.js';
-import { stops } from './stops.js';
-import { timetable } from './timetable.js';
+import { html, LitElement, property } from 'lit-element';
+import { mainStyle } from '../../../mainStyle';
+import '../../lazy-trip/lazy-trip';
+import { LazyTrip } from '../../lazy-trip/src/LazyTrip';
+import { getDistance } from './getDistance';
+import { boatIcon } from './icons/boat-icon';
+import { githubIcon } from './icons/github-icon';
+import { locationIcon } from './icons/location-icon';
+import { lazyFerryStyle } from './lazyFerryStyle';
+import { StopName, stops } from './stops';
+import { timetable } from './timetable';
+import { Weekday, weekdays } from './weekdays';
 
 export class LazyFerry extends LitElement {
-  static get properties() {
-    return {
-      today: { type: String },
-      tomorrow: { type: String },
-      from: { type: String },
-    };
+  static styles = [mainStyle, lazyFerryStyle];
+
+  @property({ type: String })
+  from: StopName =
+    (window.localStorage.getItem('from') as StopName) || stops[0].name;
+
+  @property({ type: String })
+  today: Weekday = weekdays[new Date().getDay()];
+
+  @property({ type: String })
+  tomorrow: Weekday = weekdays[(new Date().getDay() + 1) % 7];
+
+  $<T extends Element>(selector: string) {
+    const element = this.renderRoot.querySelector<T>(selector);
+    if (!element) {
+      throw new Error(`Could not find element with selector: ${selector}`);
+    }
+    return element;
   }
 
-  static get styles() {
-    return [mainStyle, lazyFerryStyle];
+  $$<T extends Element>(selector: string) {
+    return Array.from(this.renderRoot.querySelectorAll<T>(selector));
   }
 
-  constructor() {
-    super();
-
-    this.from = window.localStorage.getItem('from') || stops[0].name;
-
-    this.refresh();
-  }
-
-  $(selector) {
-    return this.renderRoot.querySelector(selector);
-  }
-
-  $$(selector) {
-    return this.renderRoot.querySelectorAll(selector);
-  }
-
-  firstUpdated(changedProperties) {
+  firstUpdated(changedProperties: Map<PropertyKey, unknown>) {
     super.firstUpdated(changedProperties);
 
-    this.$('select[name=from]').value = this.from;
+    this.$<HTMLSelectElement>('select[name=from]').value = this.from;
   }
 
   refresh() {
-    const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
-    this.today = days[new Date().getDay()];
-    this.tomorrow = days[(new Date().getDay() + 1) % 7];
+    this.today = weekdays[new Date().getDay()];
+    this.tomorrow = weekdays[(new Date().getDay() + 1) % 7];
 
     // Re-render trips and then re-focus next trip
     this.requestUpdate();
@@ -59,7 +56,7 @@ export class LazyFerry extends LitElement {
         <span>
           <a
             href="#"
-            @click="${event => {
+            @click="${(event: Event) => {
               event.preventDefault();
               this.refresh();
             }}"
@@ -71,7 +68,7 @@ export class LazyFerry extends LitElement {
         <span>
           <a
             href="#"
-            @click="${event => {
+            @click="${(event: Event) => {
               event.preventDefault();
               this.setFromClosest();
             }}"
@@ -80,8 +77,10 @@ export class LazyFerry extends LitElement {
           </a>
           <select
             name="from"
-            @input="${event => {
-              this.setFrom(event.target.value);
+            @input="${(event: InputEvent) => {
+              this.setFrom(
+                (event.target as HTMLSelectElement).value as StopName,
+              );
             }}"
           >
             ${stops.map(
@@ -122,7 +121,7 @@ export class LazyFerry extends LitElement {
     `;
   }
 
-  renderDay(day) {
+  renderDay(day: Weekday) {
     return html`
       <div class="main-day">${day}</div>
       ${timetable[this.from][day].map(
@@ -134,10 +133,12 @@ export class LazyFerry extends LitElement {
     `;
   }
 
-  setFrom(value) {
+  setFrom(value: StopName) {
     this.from = value;
 
-    for (const option of this.$$('select[name=from] option')) {
+    for (const option of this.$$<HTMLOptionElement>(
+      'select[name=from] option',
+    )) {
       option.selected = option.value === this.from;
     }
 
@@ -154,6 +155,9 @@ export class LazyFerry extends LitElement {
       } = pos;
 
       let closestStop = stops.find(stop => stop.name === this.from);
+      if (!closestStop) {
+        throw new Error(`Could not find stop with name: ${this.from}`);
+      }
       let closestDist = getDistance(lat, lon, closestStop.lat, closestStop.lon);
 
       for (const stop of stops) {
@@ -168,10 +172,10 @@ export class LazyFerry extends LitElement {
     });
   }
 
-  updated(changedProperties) {
+  updated(changedProperties: Map<PropertyKey, unknown>) {
     super.updated(changedProperties);
 
-    const lazyTrips = this.$$('lazy-trip');
+    const lazyTrips = this.$$<LazyTrip>('lazy-trip');
     if (!lazyTrips) {
       return;
     }

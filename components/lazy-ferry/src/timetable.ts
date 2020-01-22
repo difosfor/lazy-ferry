@@ -1,4 +1,19 @@
-export const timetable = {
+import { StopName } from './stops';
+import { Weekday } from './weekdays';
+
+export interface Trip {
+  time: string;
+  line: string;
+  to: StopName[];
+}
+
+type Timetable = {
+  [key in StopName]: {
+    [key in Weekday]: Trip[];
+  };
+};
+
+export const timetable: Timetable = {
   Pontsteiger: {
     monday: [
       { time: '00:10:00', line: '905', to: ['Centraal Station'] },
@@ -761,6 +776,8 @@ export const timetable = {
       { time: '19:07:00', line: '900', to: ['Pontsteiger'] },
       { time: '19:22:00', line: '900', to: ['Pontsteiger'] },
     ],
+    saturday: [],
+    sunday: [],
   },
   'Centraal Station': {
     monday: [
@@ -6733,10 +6750,26 @@ export const timetable = {
   },
   NDSM: {
     monday: [
-      { time: '00:02:00', line: '905', to: ['Pontsteiger', 'Centraal Station'] },
-      { time: '00:38:00', line: '905', to: ['Pontsteiger', 'Centraal Station'] },
-      { time: '01:14:00', line: '905', to: ['Pontsteiger', 'Centraal Station'] },
-      { time: '01:49:00', line: '905', to: ['Pontsteiger', 'Centraal Station'] },
+      {
+        time: '00:02:00',
+        line: '905',
+        to: ['Pontsteiger', 'Centraal Station'],
+      },
+      {
+        time: '00:38:00',
+        line: '905',
+        to: ['Pontsteiger', 'Centraal Station'],
+      },
+      {
+        time: '01:14:00',
+        line: '905',
+        to: ['Pontsteiger', 'Centraal Station'],
+      },
+      {
+        time: '01:49:00',
+        line: '905',
+        to: ['Pontsteiger', 'Centraal Station'],
+      },
       { time: '06:52:00', line: '903', to: ['Pontsteiger'] },
       { time: '07:00:00', line: '906', to: ['Centraal Station'] },
       { time: '07:22:00', line: '903', to: ['Pontsteiger'] },
@@ -6829,10 +6862,26 @@ export const timetable = {
       { time: '23:40:00', line: '903', to: ['Pontsteiger'] },
     ],
     tuesday: [
-      { time: '00:02:00', line: '905', to: ['Pontsteiger', 'Centraal Station'] },
-      { time: '00:38:00', line: '905', to: ['Pontsteiger', 'Centraal Station'] },
-      { time: '01:14:00', line: '905', to: ['Pontsteiger', 'Centraal Station'] },
-      { time: '01:49:00', line: '905', to: ['Pontsteiger', 'Centraal Station'] },
+      {
+        time: '00:02:00',
+        line: '905',
+        to: ['Pontsteiger', 'Centraal Station'],
+      },
+      {
+        time: '00:38:00',
+        line: '905',
+        to: ['Pontsteiger', 'Centraal Station'],
+      },
+      {
+        time: '01:14:00',
+        line: '905',
+        to: ['Pontsteiger', 'Centraal Station'],
+      },
+      {
+        time: '01:49:00',
+        line: '905',
+        to: ['Pontsteiger', 'Centraal Station'],
+      },
       { time: '06:52:00', line: '903', to: ['Pontsteiger'] },
       { time: '07:00:00', line: '906', to: ['Centraal Station'] },
       { time: '07:22:00', line: '903', to: ['Pontsteiger'] },
@@ -6926,10 +6975,26 @@ export const timetable = {
       { time: '24:00:00', line: '906', to: ['Centraal Station'] },
     ],
     wednesday: [
-      { time: '00:02:00', line: '905', to: ['Pontsteiger', 'Centraal Station'] },
-      { time: '00:38:00', line: '905', to: ['Pontsteiger', 'Centraal Station'] },
-      { time: '01:14:00', line: '905', to: ['Pontsteiger', 'Centraal Station'] },
-      { time: '01:49:00', line: '905', to: ['Pontsteiger', 'Centraal Station'] },
+      {
+        time: '00:02:00',
+        line: '905',
+        to: ['Pontsteiger', 'Centraal Station'],
+      },
+      {
+        time: '00:38:00',
+        line: '905',
+        to: ['Pontsteiger', 'Centraal Station'],
+      },
+      {
+        time: '01:14:00',
+        line: '905',
+        to: ['Pontsteiger', 'Centraal Station'],
+      },
+      {
+        time: '01:49:00',
+        line: '905',
+        to: ['Pontsteiger', 'Centraal Station'],
+      },
       { time: '06:52:00', line: '903', to: ['Pontsteiger'] },
       { time: '07:00:00', line: '906', to: ['Centraal Station'] },
       { time: '07:22:00', line: '903', to: ['Pontsteiger'] },
@@ -7022,10 +7087,26 @@ export const timetable = {
       { time: '23:40:00', line: '903', to: ['Pontsteiger'] },
     ],
     thursday: [
-      { time: '00:02:00', line: '905', to: ['Pontsteiger', 'Centraal Station'] },
-      { time: '00:38:00', line: '905', to: ['Pontsteiger', 'Centraal Station'] },
-      { time: '01:14:00', line: '905', to: ['Pontsteiger', 'Centraal Station'] },
-      { time: '01:49:00', line: '905', to: ['Pontsteiger', 'Centraal Station'] },
+      {
+        time: '00:02:00',
+        line: '905',
+        to: ['Pontsteiger', 'Centraal Station'],
+      },
+      {
+        time: '00:38:00',
+        line: '905',
+        to: ['Pontsteiger', 'Centraal Station'],
+      },
+      {
+        time: '01:14:00',
+        line: '905',
+        to: ['Pontsteiger', 'Centraal Station'],
+      },
+      {
+        time: '01:49:00',
+        line: '905',
+        to: ['Pontsteiger', 'Centraal Station'],
+      },
       { time: '06:52:00', line: '903', to: ['Pontsteiger'] },
       { time: '07:00:00', line: '906', to: ['Centraal Station'] },
       { time: '07:22:00', line: '903', to: ['Pontsteiger'] },
@@ -7118,10 +7199,26 @@ export const timetable = {
       { time: '23:40:00', line: '903', to: ['Pontsteiger'] },
     ],
     friday: [
-      { time: '00:02:00', line: '905', to: ['Pontsteiger', 'Centraal Station'] },
-      { time: '00:38:00', line: '905', to: ['Pontsteiger', 'Centraal Station'] },
-      { time: '01:14:00', line: '905', to: ['Pontsteiger', 'Centraal Station'] },
-      { time: '01:49:00', line: '905', to: ['Pontsteiger', 'Centraal Station'] },
+      {
+        time: '00:02:00',
+        line: '905',
+        to: ['Pontsteiger', 'Centraal Station'],
+      },
+      {
+        time: '00:38:00',
+        line: '905',
+        to: ['Pontsteiger', 'Centraal Station'],
+      },
+      {
+        time: '01:14:00',
+        line: '905',
+        to: ['Pontsteiger', 'Centraal Station'],
+      },
+      {
+        time: '01:49:00',
+        line: '905',
+        to: ['Pontsteiger', 'Centraal Station'],
+      },
       { time: '06:52:00', line: '903', to: ['Pontsteiger'] },
       { time: '07:00:00', line: '906', to: ['Centraal Station'] },
       { time: '07:22:00', line: '903', to: ['Pontsteiger'] },
@@ -7214,11 +7311,31 @@ export const timetable = {
       { time: '23:40:00', line: '903', to: ['Pontsteiger'] },
     ],
     saturday: [
-      { time: '00:04:00', line: '905', to: ['Pontsteiger', 'Centraal Station'] },
-      { time: '00:49:00', line: '905', to: ['Pontsteiger', 'Centraal Station'] },
-      { time: '01:34:00', line: '905', to: ['Pontsteiger', 'Centraal Station'] },
-      { time: '02:19:00', line: '905', to: ['Pontsteiger', 'Centraal Station'] },
-      { time: '03:04:00', line: '905', to: ['Pontsteiger', 'Centraal Station'] },
+      {
+        time: '00:04:00',
+        line: '905',
+        to: ['Pontsteiger', 'Centraal Station'],
+      },
+      {
+        time: '00:49:00',
+        line: '905',
+        to: ['Pontsteiger', 'Centraal Station'],
+      },
+      {
+        time: '01:34:00',
+        line: '905',
+        to: ['Pontsteiger', 'Centraal Station'],
+      },
+      {
+        time: '02:19:00',
+        line: '905',
+        to: ['Pontsteiger', 'Centraal Station'],
+      },
+      {
+        time: '03:04:00',
+        line: '905',
+        to: ['Pontsteiger', 'Centraal Station'],
+      },
       { time: '07:30:00', line: '906', to: ['Centraal Station'] },
       { time: '08:00:00', line: '906', to: ['Centraal Station'] },
       { time: '08:30:00', line: '906', to: ['Centraal Station'] },
@@ -7328,17 +7445,37 @@ export const timetable = {
       { time: '23:50:00', line: '903', to: ['Pontsteiger'] },
     ],
     sunday: [
-      { time: '00:04:00', line: '905', to: ['Pontsteiger', 'Centraal Station'] },
+      {
+        time: '00:04:00',
+        line: '905',
+        to: ['Pontsteiger', 'Centraal Station'],
+      },
       { time: '00:30:00', line: '906', to: ['Centraal Station'] },
-      { time: '00:49:00', line: '905', to: ['Pontsteiger', 'Centraal Station'] },
+      {
+        time: '00:49:00',
+        line: '905',
+        to: ['Pontsteiger', 'Centraal Station'],
+      },
       { time: '01:00:00', line: '906', to: ['Centraal Station'] },
       { time: '01:30:00', line: '906', to: ['Centraal Station'] },
-      { time: '01:34:00', line: '905', to: ['Pontsteiger', 'Centraal Station'] },
+      {
+        time: '01:34:00',
+        line: '905',
+        to: ['Pontsteiger', 'Centraal Station'],
+      },
       { time: '02:00:00', line: '906', to: ['Centraal Station'] },
-      { time: '02:19:00', line: '905', to: ['Pontsteiger', 'Centraal Station'] },
+      {
+        time: '02:19:00',
+        line: '905',
+        to: ['Pontsteiger', 'Centraal Station'],
+      },
       { time: '02:30:00', line: '906', to: ['Centraal Station'] },
       { time: '03:00:00', line: '906', to: ['Centraal Station'] },
-      { time: '03:04:00', line: '905', to: ['Pontsteiger', 'Centraal Station'] },
+      {
+        time: '03:04:00',
+        line: '905',
+        to: ['Pontsteiger', 'Centraal Station'],
+      },
       { time: '03:30:00', line: '906', to: ['Centraal Station'] },
       { time: '04:00:00', line: '906', to: ['Centraal Station'] },
       { time: '04:30:00', line: '906', to: ['Centraal Station'] },

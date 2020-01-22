@@ -33,7 +33,8 @@ export const lazyFerryStyle = css`
   header select {
     height: 1.9em;
     width: initial;
-    padding: var(--padding) calc(var(--padding) + 1.1em) var(--padding) calc(var(--padding) + 0.2em);
+    padding: var(--padding) calc(var(--padding) + 1.1em) var(--padding)
+      calc(var(--padding) + 0.2em);
     margin-bottom: 0;
     color: var(--primary-text-color);
     font-size: 0.8em;

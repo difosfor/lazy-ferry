@@ -1,4 +1,6 @@
-# Copy any changes made here to .eslintignore
+# Copied from .eslintignore
+
+# Copied from .gitignore
 
 ## editors
 /.idea
@@ -13,10 +15,10 @@
 
 ## testing
 /coverage/
+/scrape-cache/
 
 ## temp folders
 /.tmp/
-/scrape-cache/
 
 ## build
 /build/
