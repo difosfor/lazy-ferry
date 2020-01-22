@@ -30,11 +30,11 @@ export class LazyFerry extends LitElement {
   }
 
   $(selector) {
-    return this.shadowRoot ? this.shadowRoot.querySelector(selector) : null;
+    return this.renderRoot.querySelector(selector);
   }
 
   $$(selector) {
-    return this.shadowRoot ? this.shadowRoot.querySelectorAll(selector) : null;
+    return this.renderRoot.querySelectorAll(selector);
   }
 
   firstUpdated(changedProperties) {
