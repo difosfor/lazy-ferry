@@ -1,5 +1,5 @@
 import { html, LitElement } from 'lit-element';
-import { sscaffoldStyle } from '../../../sscaffoldStyle.js';
+import { mainStyle } from '../../../mainStyle.js';
 import '../../lazy-trip/lazy-trip.js';
 import { getDistance } from './getDistance.js';
 import { boatIcon } from './icons/boat-icon.js';
@@ -19,7 +19,7 @@ export class LazyFerry extends LitElement {
   }
 
   static get styles() {
-    return [sscaffoldStyle, lazyFerryStyle];
+    return [mainStyle, lazyFerryStyle];
   }
 
   constructor() {

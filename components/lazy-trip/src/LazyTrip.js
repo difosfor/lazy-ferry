@@ -1,6 +1,6 @@
 import { html, LitElement } from 'lit-element';
+import { mainStyle } from '../../../mainStyle.js';
 import { lazyTripStyle } from './lazyTripStyle.js';
-import { sscaffoldStyle } from '../../../sscaffoldStyle.js';
 
 function timeToSeconds(time) {
   const [, hh, mm, ss] = time.match(/^(\d\d):(\d\d):(\d\d)$/);
@@ -24,7 +24,7 @@ export class LazyTrip extends LitElement {
   }
 
   static get styles() {
-    return [sscaffoldStyle, lazyTripStyle];
+    return [mainStyle, lazyTripStyle];
   }
 
   constructor() {
@@ -37,8 +37,6 @@ export class LazyTrip extends LitElement {
 
   render() {
     return html`
-      <link rel="stylesheet" href="sscaffold.css" />
-
       <div class="clearfix">
         <div class="time">${this.trip.time}</div>
         <div class="line">${this.trip.line}</div>

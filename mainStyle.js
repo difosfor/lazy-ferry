@@ -5,7 +5,7 @@
 
 import { css } from 'lit-element';
 
-export const sscaffoldStyle = css`
+export const mainStyle = css`
   /******************************************************************************
    *
    *  RESET
