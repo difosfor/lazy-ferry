@@ -21,6 +21,7 @@ export const lazyFerryStyle = css`
 
   header {
     width: 100%;
+    flex-shrink: 0;
     padding-top: calc(var(--safe-area-inset-top) + var(--padding));
     display: flex;
     justify-content: space-between;
@@ -69,6 +70,7 @@ export const lazyFerryStyle = css`
 
   footer {
     width: 100%;
+    flex-shrink: 0;
     padding-bottom: calc(var(--safe-area-inset-bottom) + var(--padding));
     background-color: var(--primary-dark-color);
     font-size: 0.8em;
