@@ -32,7 +32,7 @@
     "es-dev-server": "^1.5.0",
     "eslint": "^6.1.0",
     "husky": "^1.0.0",
-    "lint-staged": "^8.0.0",
+    "lint-staged": "^13.1.0",
     "node-fetch": "^3.1.1",
     "prettier": "^1.19.1",
     "rimraf": "^2.6.3",
