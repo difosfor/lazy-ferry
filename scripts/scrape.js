@@ -48,6 +48,10 @@ async function getUrls(line) {
     `https://maps.gvb.nl/api/v1/timetable_validities?linenumber=${line}&include=timetables`,
     { headers: { 'X-Api-Key': API_KEY } },
   );
+  if (result.linked === undefined) {
+    console.log('undefined result for line:', line);
+    return [];
+  }
   return result.linked.timetables.map(table => table.jsonUrl);
 }
 
