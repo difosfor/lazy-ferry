@@ -1,7 +1,7 @@
 import { StopName } from './stops';
 import { Weekday } from './weekdays';
 
-interface Trip {
+export interface Trip {
   time: string;
   line: string;
   to: StopName[];
