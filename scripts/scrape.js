@@ -1,7 +1,6 @@
 /* eslint-env node */
 /* eslint-disable no-console, import/no-extraneous-dependencies, no-await-in-loop */
 
-const fetch = require('node-fetch');
 const fs = require('fs');
 const path = require('path');
 const prettier = require('prettier');
@@ -22,7 +21,7 @@ function writeFile(filePath, text) {
 }
 
 async function apiGet(url, init) {
-  const apiPath = url.replace('https://maps.gvb.nl/api/v1/', '');
+  const apiPath = url.replace('https://maps.gvb.nl/', '');
   const cachePath = `${CACHE_DIR}/${apiPath}`;
 
   try {
@@ -34,7 +33,9 @@ async function apiGet(url, init) {
 
   const response = await fetch(url, init);
   if (!response.ok) {
-    throw new Error(`GET ${apiPath} ${response.status} ${response.statusText}`);
+    return new Error(
+      `GET ${apiPath} ${response.status} ${response.statusText}`,
+    );
   }
   const obj = await response.json();
 
@@ -56,12 +57,20 @@ async function getUrls(line) {
 }
 
 async function getJourney(url) {
+  const result = await apiGet(url);
+  if (result instanceof Error) {
+    // TODO: Avoid trying to fetch these in the first place
+    // E.g: Update to using new API?
+    console.log('Failed to fetch journey', result.message);
+    return undefined;
+  }
+
   const {
     line,
     validFor,
     journey: { stops },
     trips,
-  } = await apiGet(url);
+  } = result;
 
   const days = [];
   for (const day of validFor) {
@@ -83,14 +92,20 @@ async function getJourney(url) {
 }
 
 async function getJourneys() {
-  const lines = [900, 901, 902, 903, 905, 906, 907, 915];
+  // const lines = [900, 901, 902, 903, 905, 906, 907, 915];
+  // 905 and 907 are undefined now; let's try to use these new(?) line names
+  const lines = ['F1', 'F2', 'F3', 'F4', 'F6', 'F7'];
   const journeys = [];
   for (const line of lines) {
     const urls = await getUrls(line);
     for (const url of urls) {
       const journey = await getJourney(url);
       // console.log(journey);
-      journeys.push(journey);
+      // TODO: Figure out why some of the specified urls return 404
+      // For now let's just skip that data; that does result in timetable.ts going down in size from 569K to 289K though
+      if (journey) {
+        journeys.push(journey);
+      }
     }
   }
   return journeys;
@@ -121,6 +136,8 @@ async function getTimetable() {
         };
       }
 
+      // TODO: Bump times 24:00:00 and later to next day
+      // P.e: monday 24:30:00 => tuesday 00:30:00
       for (const day of days) {
         for (const times of trips) {
           // Filter out duplicates
